@@ -10,8 +10,8 @@ jobs:
     strategy:
       matrix:
         options: ['', '-p:RepositoryUrl=https://github.com/${{ github.repository }}']
+      fail-fast: false
 
-    continue-on-error: true
     runs-on: ubuntu-latest
 
     # Use example from https://github.com/actions/setup-dotnet
