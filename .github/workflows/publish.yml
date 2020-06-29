@@ -6,7 +6,10 @@ on:
   push:
 
 jobs:
-  public:
+  publish:
+    strategy:
+      matrix:
+        options: ['', '-p:RepositoryUrl:https://github.com/${{ github.repository }}']
     runs-on: ubuntu-latest
 
     # Use example from https://github.com/actions/setup-dotnet
@@ -20,8 +23,8 @@ jobs:
       env:
         NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-    - name: Create the package
-      run: dotnet pack --configuration Release
+    - name: Create the package ${{ matrix.options }}
+      run: dotnet pack --configuration Release ${{ matrix.options }}
 
     - name: Publish the package to GPR
       run: dotnet nuget push bin/Release/*.nupkg
