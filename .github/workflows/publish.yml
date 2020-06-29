@@ -12,6 +12,8 @@ jobs:
         options:
           - ''
           - '-p:RepositoryUrl=https://github.com/${{ github.repository }}'
+          - '-p:RepositoryUrl=https://github.com/${{ github.repository_owner }}/unknown_repo'
+          - '-p:RepositoryUrl=https://github.com/github/github'
       fail-fast: false
 
     runs-on: ubuntu-latest
