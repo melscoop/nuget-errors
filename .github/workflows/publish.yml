@@ -14,7 +14,7 @@ jobs:
           - '-p:RepositoryUrl=https://github.com/${{ github.repository }}'
           - '-p:RepositoryUrl=https://github.com/${{ github.repository_owner }}/unknown_repo'
           - '-p:RepositoryUrl=https://github.com/github/github'  # private repo
-          - '-p:RepositoryUrl=https://github.com/desktop/github' # public repo
+          - '-p:RepositoryUrl=https://github.com/desktop/desktop' # public repo
           - '-p:RepositoryUrl=https://github.com/malformed'      # not a repo
           - '-p:RepositoryUrl=https://bitbucket.org/foo/bar'     # not on github
       fail-fast: false
