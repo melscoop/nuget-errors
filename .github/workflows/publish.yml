@@ -96,10 +96,12 @@ jobs:
         dotnet-version: '3.1.x' # SDK Version to use.
         source-url: ${{ matrix.source-url }}
       env:
-        NUGET_AUTH_TOKEN: ${{ matrix.token }}
+        NUGET_AUTH_TOKEN: '%NUGET_AUTH_TOKEN%'
 
     - name: Create the package ${{ matrix.options }}
       run: dotnet pack --configuration Release -p:RepositoryUrl=${{ matrix.RepositoryUrl }}
 
     - name: Publish the package to GPR
       run: dotnet nuget push bin/Release/*.nupkg
+      env:
+        NUGET_AUTH_TOKEN: "${{ matrix.token }}"
