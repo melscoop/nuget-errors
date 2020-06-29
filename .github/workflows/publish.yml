@@ -6,7 +6,7 @@ on:
   push:
 
 jobs:
-  publish:
+  repository-urls:
     strategy:
       matrix:
         RepositoryUrl:
@@ -16,6 +16,8 @@ jobs:
           - https://github.com/desktop/desktop  # public repo
           - https://github.com/malformed        # not a repo
           - https://bitbucket.org/foo/bar       # not on github
+        source-url:
+          - https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
         
       fail-fast: false
 
@@ -28,7 +30,38 @@ jobs:
     - uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.x' # SDK Version to use.
-        source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+        source-url: ${{ matrix.source-url }}
+      env:
+        NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+    - name: Create the package ${{ matrix.options }}
+      run: dotnet pack --configuration Release -p:Version=0.0.0-g${{ github.sha }} -p:RepositoryUrl=${{ matrix.RepositoryUrl }}
+
+    - name: Publish the package to GPR
+      run: dotnet nuget push bin/Release/*.nupkg
+
+  source-urls:
+    strategy:
+      matrix:
+        RepositoryUrl:
+          - https://github.com/${{ github.repository }}
+        source-url:
+          - https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json # owner
+          - https://nuget.pkg.github.com/${{ github.repository }}/index.json       # owner/repo
+          - https://nuget.pkg.github.com/index.json                                # /index.json
+        
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+
+    # Use example from https://github.com/actions/setup-dotnet
+    steps:
+    - uses: actions/checkout@master
+
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.x' # SDK Version to use.
+        source-url: ${{ matrix.source-url }}
       env:
         NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
