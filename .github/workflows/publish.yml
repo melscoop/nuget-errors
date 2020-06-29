@@ -82,6 +82,7 @@ jobs:
         token:
           - '' # empty
           - bad_token
+          - format('{0}{1}', '11f80c8d98105405a3c', '94c737be9ddeedf806e52') # read:packages
         
       fail-fast: false
 
