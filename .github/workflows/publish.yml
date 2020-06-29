@@ -9,7 +9,9 @@ jobs:
   publish:
     strategy:
       matrix:
-        options: ['', '-p:RepositoryUrl=https://github.com/${{ github.repository }}']
+        options:
+          - ''
+          - '-p:RepositoryUrl=https://github.com/${{ github.repository }}'
       fail-fast: false
 
     runs-on: ubuntu-latest
