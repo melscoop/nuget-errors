@@ -71,3 +71,36 @@ jobs:
 
     - name: Publish the package to GPR
       run: dotnet nuget push bin/Release/*.nupkg
+
+  tokens:
+    strategy:
+      matrix:
+        RepositoryUrl:
+          - https://github.com/${{ github.repository }}
+        source-url:
+          - https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+        token:
+          - '' # empty
+          - ${{ secrets.GITHUB_TOKEN }}
+          - bad_token
+        
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+
+    # Use example from https://github.com/actions/setup-dotnet
+    steps:
+    - uses: actions/checkout@master
+
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.x' # SDK Version to use.
+        source-url: ${{ matrix.source-url }}
+      env:
+        NUGET_AUTH_TOKEN: ${{ matrix.token }}
+
+    - name: Create the package ${{ matrix.options }}
+      run: dotnet pack --configuration Release -p:RepositoryUrl=${{ matrix.RepositoryUrl }}
+
+    - name: Publish the package to GPR
+      run: dotnet nuget push bin/Release/*.nupkg
