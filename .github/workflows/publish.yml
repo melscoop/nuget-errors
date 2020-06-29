@@ -9,7 +9,7 @@ jobs:
   publish:
     strategy:
       matrix:
-        options: ['', '-p:RepositoryUrl:https://github.com/${{ github.repository }}']
+        options: ['', '-p:RepositoryUrl=https://github.com/${{ github.repository }}']
     runs-on: ubuntu-latest
 
     # Use example from https://github.com/actions/setup-dotnet
