@@ -81,7 +81,6 @@ jobs:
           - https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
         token:
           - '' # empty
-          - ${{ secrets.GITHUB_TOKEN }}
           - bad_token
         
       fail-fast: false
