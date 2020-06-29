@@ -9,14 +9,14 @@ jobs:
   publish:
     strategy:
       matrix:
-        options:
-          - ''
-          - '-p:RepositoryUrl=https://github.com/${{ github.repository }}'
-          - '-p:RepositoryUrl=https://github.com/${{ github.repository_owner }}/unknown_repo'
-          - '-p:RepositoryUrl=https://github.com/github/github'  # private repo
-          - '-p:RepositoryUrl=https://github.com/desktop/desktop' # public repo
-          - '-p:RepositoryUrl=https://github.com/malformed'      # not a repo
-          - '-p:RepositoryUrl=https://bitbucket.org/foo/bar'     # not on github
+        RepositoryUrl:
+          - https://github.com/${{ github.repository }}
+          - https://github.com/${{ github.repository_owner }}/unknown_repo
+          - https://github.com/github/github    # private repo
+          - https://github.com/desktop/desktop  # public repo
+          - https://github.com/malformed        # not a repo
+          - https://bitbucket.org/foo/bar       # not on github
+        
       fail-fast: false
 
     runs-on: ubuntu-latest
@@ -33,7 +33,7 @@ jobs:
         NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     - name: Create the package ${{ matrix.options }}
-      run: dotnet pack --configuration Release -p:Version=0.0.0-g${{ github.sha }} ${{ matrix.options }}
+      run: dotnet pack --configuration Release -p:Version=0.0.0-g${{ github.sha }} -p:RepositoryUrl=${{ matrix.RepositoryUrl }}
 
     - name: Publish the package to GPR
       run: dotnet nuget push bin/Release/*.nupkg
