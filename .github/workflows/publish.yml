@@ -126,10 +126,9 @@ jobs:
     - uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.x' # SDK Version to use.
-        source-url: ${{ matrix.source-url }}
 
     - name: Create the package ${{ matrix.options }}
       run: dotnet pack --configuration Release -p:RepositoryUrl=${{ matrix.RepositoryUrl }}
 
     - name: Publish the package to GPR
-      run: dotnet nuget push bin/Release/*.nupkg
+      run: dotnet nuget push bin/Release/*.nupkg --source ${{ matrix.source-url }}
