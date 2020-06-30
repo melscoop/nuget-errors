@@ -16,6 +16,7 @@ jobs:
           - https://github.com/desktop/desktop  # public repo
           - https://github.com/malformed        # not a repo
           - https://bitbucket.org/foo/bar       # not on github
+          - ''                                  # no url defined
         source-url:
           - https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
         
@@ -151,7 +152,7 @@ jobs:
         NUGET_AUTH_TOKEN: '%NUGET_AUTH_TOKEN%'
 
     - name: Create the package
-      run: dotnet pack --configuration Release -p:Version=0.0.0-safe-g${{ github.sha }} -p:RepositoryUrl=${{ matrix.RepositoryUrl }}
+      run: dotnet pack --configuration Release -p:Version=0.0.0-safe-g${{ github.sha }} -p:RepositoryUrl=${{ env.RepositoryUrl }}
 
     - name: Publish the package to GPR
       run: dotnet nuget push bin/Release/*.nupkg --source ${{ env.source-url }}
