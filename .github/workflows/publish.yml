@@ -158,3 +158,28 @@ jobs:
       run: dotnet nuget push bin/Release/*.nupkg --source ${{ env.source-url }}
       env:
         NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  conflict:
+    env:
+      RepositoryUrl: https://github.com/${{ github.repository }}
+      source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.x' # SDK Version to use.
+        source-url: ${{ env.source-url }}
+      env:
+        NUGET_AUTH_TOKEN: '%NUGET_AUTH_TOKEN%'
+
+    - name: Create the package
+      run: dotnet pack --configuration Release -p:Version=0.0.0 -p:RepositoryUrl=${{ env.RepositoryUrl }}
+
+    - name: Publish the package to GPR
+      run: dotnet nuget push bin/Release/*.nupkg --source ${{ env.source-url }}
+      env:
+        NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
