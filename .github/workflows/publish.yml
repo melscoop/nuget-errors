@@ -89,6 +89,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      version: 0.0.0-g${{ github.sha }}-${{ strategy.job-index }}
+
     # Use example from https://github.com/actions/setup-dotnet
     steps:
     - uses: actions/checkout@master
@@ -101,7 +104,7 @@ jobs:
         NUGET_AUTH_TOKEN: '%NUGET_AUTH_TOKEN%'
 
     - name: Create the package ${{ matrix.options }}
-      run: dotnet pack --configuration Release -p:RepositoryUrl=${{ matrix.RepositoryUrl }}
+      run: dotnet pack --configuration Release -p:Version=${{ env.version }} -p:RepositoryUrl=${{ matrix.RepositoryUrl }}
 
     - name: Publish the package to GPR
       run: dotnet nuget push bin/Release/*.nupkg
