@@ -51,6 +51,7 @@ jobs:
           - https://nuget.pkg.github.com/${{ github.repository }}/index.json       # owner/repo
           - https://nuget.pkg.github.com/index.json                                # /index.json
           - https://nuget.pkg.github.com/                                          # no /index.json
+          - https://github.com/${{ github.repository }}                            # repository url
         
       fail-fast: false
 
